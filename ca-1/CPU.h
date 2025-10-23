@@ -25,4 +25,12 @@ public:
 	
 };
 
+class RegisterFile {
+private:
+	uint32_t registers[32];
+public:
+	RegisterFile();
+	void execute(uint8_t rs1, uint8_t rs2, uint32_t& rs1Data, uint32_t& rs2Data, uint8_t rd, uint32_t writeData, bool regWrite);
+}
+
 // add other functions and objects here
