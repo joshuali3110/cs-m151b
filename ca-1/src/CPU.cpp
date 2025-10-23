@@ -18,6 +18,7 @@ CPU::CPU()
 	registerFile = RegisterFile();
 	alu = ALU();
 	aluControl = ALUControl();
+	mux = Mux();
 }
 
 
