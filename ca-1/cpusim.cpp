@@ -26,7 +26,8 @@ int main(int argc, char* argv[])
 	Each line in the input file is stored as an hex and is 1 byte (each four lines are one instruction). You need to read the file line by line and store it into the memory. You may need a mechanism to convert these values to bits so that you can read opcodes, operands, etc.
 	*/
 
-	char instMem[4096];
+	vector<uint8_t> instMem;
+	vector<uint32_t> instructions;
 
 
 	if (argc < 2) {
@@ -39,21 +40,20 @@ int main(int argc, char* argv[])
 		cout<<"error opening file\n";
 		return 0; 
 	}
-	string line; 
-	int i = 0;
-	while (infile) {
-			infile>>line;
-			stringstream line2(line);
-			char x; 
-			line2>>x;
-			instMem[i] = x; // be careful about hex
-			i++;
-			line2>>x;
-			instMem[i] = x; // be careful about hex
-			//cout<<instMem[i]<<endl;
-			i++;
-		}
-	int maxPC= i/4; 
+
+	
+	string line;
+
+	while (infile >> line) {
+		instMem.push_back((uint8_t)stoi(line, nullptr, 16));
+	}
+
+	for(int i = 0; i < instMem.size(); i += 4) {
+		instructions.push_back(((uint8_t)instMem[i+3] << 24) | ((uint8_t)instMem[i+2] << 16) | ((uint8_t)instMem[i+1] << 8) | (uint8_t)instMem[i]);
+	}
+
+
+	int maxPC= instMem.size() / 4; 
 
 	/* Instantiate your CPU object here.  CPU class is the main class in this project that defines different components of the processor.
 	CPU class also has different functions for each stage (e.g., fetching an instruction, decoding, etc.).
@@ -66,18 +66,18 @@ int main(int argc, char* argv[])
 	//Instruction myInst; 
 	
 	bool done = true;
-	while (done == true) // processor's main loop. Each iteration is equal to one clock cycle.  
-	{
-		//fetch
+	// while (done == true) // processor's main loop. Each iteration is equal to one clock cycle.  
+	// {
+	// 	//fetch
 		
 
-		// decode
+	// 	// decode
 		
-		// ... 
-		myCPU.incPC();
-		if (myCPU.readPC() > maxPC)
-			break;
-	}
+	// 	// ... 
+	// 	myCPU.incPC();
+	// 	if (myCPU.readPC() > maxPC)
+	// 		break;
+	// }
 	int a0 =0;
 	int a1 =0;  
 	// print the results (you should replace a0 and a1 with your own variables that point to a0 and a1)
