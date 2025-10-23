@@ -16,8 +16,10 @@ class CPU {
 private:
 	int dmemory[4096]; //data memory byte addressable in little endian fashion;
 	unsigned long PC; //pc
-	unsigned long next_PC;
+	unsigned long nextPC;
 	RegisterFile registerFile;
+	ALU alu;
+	ALUControl aluControl;
 public:
 	CPU();
 	unsigned long readPC();
