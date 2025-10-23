@@ -11,6 +11,8 @@ CPU::CPU()
 	{
 		dmemory[i] = (0);
 	}
+
+	registerFile = RegisterFile();
 }
 
 
