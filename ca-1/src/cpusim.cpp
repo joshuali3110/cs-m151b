@@ -105,18 +105,6 @@ int main(int argc, char* argv[])
 		cpu.update();
 	}
 		
-	// while (done == true) // processor's main loop. Each iteration is equal to one clock cycle.  
-	// {
-	// 	//fetch
-		
-
-	// 	// decode
-		
-	// 	// ... 
-	// 	myCPU.incPC();
-	// 	if (myCPU.readPC() > maxPC)
-	// 		break;
-	// }
 	int a0 = cpu.registerFile.registers[10];
 	int a1 = cpu.registerFile.registers[11];
 	// print the results (you should replace a0 and a1 with your own variables that point to a0 and a1)

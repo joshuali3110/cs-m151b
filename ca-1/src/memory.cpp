@@ -35,6 +35,6 @@ InstructionMemory::InstructionMemory(vector<uint8_t>& instMem) {
 	}
 }
 
-uint32_t InstructionMemory::fetchInstruction(unsigned long address) {
+uint32_t InstructionMemory::fetchInstruction(uint32_t address) {
     return instructions[address / 4];
 }

@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include<stdlib.h>
 #include <string>
+#include <vector>
 using namespace std;
 
 class DataMemory {
@@ -19,5 +20,5 @@ private:
     vector<uint32_t> instructions;
 public:
     InstructionMemory(vector<uint8_t>& instMem);
-    fetchInstruction(uint32_t address);
+    uint32_t fetchInstruction(uint32_t address);
 };

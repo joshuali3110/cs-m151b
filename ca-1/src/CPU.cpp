@@ -4,7 +4,7 @@
 // CPU class implementation
 // ------------------------------------------------------------
 
-CPU::CPU(uint32_tmaxPC, vector<uint8_t>& instMem)
+CPU::CPU(uint32_t maxPC, vector<uint8_t>& instMem)
 {
 	PC = 0; //set PC to 0
 	nextPC = 0;

@@ -28,9 +28,9 @@ public:
     bool jump;
     bool branch;
     bool offset;
-    uint8_t& funct7;
-    uint8_t& funct3;
-    uint8_t& opcode;
+    uint8_t funct7;
+    uint8_t funct3;
+    uint8_t opcode;
 
 	RegisterFile registerFile;
 	ALU alu;
