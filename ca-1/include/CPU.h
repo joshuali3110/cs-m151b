@@ -12,13 +12,6 @@
 #include "controller.h"
 using namespace std;
 
-// class instruction { // optional
-// public:
-// 	bitset<32> instr;//instruction
-// 	instruction(bitset<32> fetch); // constructor
-
-// };
-
 class CPU {
 private:
 	unsigned long PC; 
@@ -37,5 +30,16 @@ public:
 	void incPC();
 	void update();
 	void setPC(unsigned long pc);
+};
+
+class Instruction {
+public:
+	uint32_t instruction;
+	uint8_t rd;
+	uint8_t rs1;
+	uint8_t rs2;
+	uint32_t immediate;
+	Instruction(uint32_t instruction);
+	void generateImmediate();
 };
 
