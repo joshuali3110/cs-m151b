@@ -8,7 +8,7 @@ using namespace std;
 class ALU {
 public:
     ALU();
-    void execute(uint32_t op1, uint32_t op2, uint8_t opcode, uint32_t& result);
+    void execute(uint32_t op1, uint32_t op2, uint8_t opcode, uint32_t& result, bool& zero);
 }
 
 class ALUControl {

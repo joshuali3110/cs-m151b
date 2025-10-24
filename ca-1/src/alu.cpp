@@ -2,7 +2,7 @@
 
 ALU::ALU() {}
 
-void ALU::execute(uint32_t op1, uint32_t op2, uint8_t opcode, uint32_t& result) {
+void ALU::execute(uint32_t op1, uint32_t op2, uint8_t opcode, uint32_t& result, bool& zero) {
     switch (opcode) {
         case 0b111: // ADD: addi, lbu, lw, sh, sw, jalr
             result = op1 + op2;
@@ -29,6 +29,8 @@ void ALU::execute(uint32_t op1, uint32_t op2, uint8_t opcode, uint32_t& result) 
             cerr << "Invalid opcode" << endl;
             break;
     }
+
+    zero = (result == 0);
 }
 
 ALUControl::ALUControl() {}
