@@ -14,5 +14,5 @@ public:
 class ALUControl {
 public:
     ALUControl();
-    uint8_t getALUControl(uint8_t funct7, uint8_t funct3, bool load, bool bne, bool lui);
+    uint8_t execute(uint8_t funct7, uint8_t funct3, bool offset, bool bne, bool lui);
 };

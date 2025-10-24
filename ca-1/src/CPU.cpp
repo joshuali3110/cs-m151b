@@ -4,11 +4,21 @@
 // CPU class implementation
 // ------------------------------------------------------------
 
-CPU::CPU(unsigned long maxPC, vector<uint8_t>& instMem)
+CPU::CPU(uint32_tmaxPC, vector<uint8_t>& instMem)
 {
 	PC = 0; //set PC to 0
 	nextPC = 0;
 	this->maxPC = maxPC;
+	regWrite = false;
+	memWrite = false;
+	memRead = false;
+	fullWord = false;
+	MemToReg = false;
+	loadImm = false;
+	aluSrc = false;
+	jump = false;
+	branch = false;
+	offset = false;
 	registerFile = RegisterFile();
 	alu = ALU();
 	aluControl = ALUControl();
@@ -19,7 +29,7 @@ CPU::CPU(unsigned long maxPC, vector<uint8_t>& instMem)
 }
 
 
-unsigned long CPU::readPC()
+uint32_t CPU::readPC()
 {
 	return PC;
 }
@@ -33,9 +43,10 @@ void CPU::update()
 {
 	PC = nextPC;
 	registerFile.update();
+	dataMemory.update();
 }
 
-void CPU::setPC(unsigned long pc) { nextPC = pc; }
+void CPU::setPC(uint32_t pc) { nextPC = pc; }
 
 Instruction::Instruction(uint32_t instruction) {
 	this->instruction = instruction;

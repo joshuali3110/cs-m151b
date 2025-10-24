@@ -13,10 +13,25 @@
 using namespace std;
 
 class CPU {
-private:
+public:
 	unsigned long PC; 
 	unsigned long nextPC;
 	unsigned long maxPC;
+
+	bool regWrite;
+    bool memWrite;	
+    bool memRead;
+    bool fullWord;
+    bool MemToReg;
+    bool loadImm;
+    bool aluSrc;
+    bool jump;
+    bool branch;
+    bool offset;
+    uint8_t& funct7;
+    uint8_t& funct3;
+    uint8_t& opcode;
+
 	RegisterFile registerFile;
 	ALU alu;
 	ALUControl aluControl;
@@ -24,12 +39,12 @@ private:
 	DataMemory dataMemory;
 	Controller controller;
 	InstructionMemory instructionMemory;
-public:
-	CPU(unsigned long maxPC, vector<uint8_t>& instMem);
+
+	CPU(uint32_t maxPC, vector<uint8_t>& instMem);
 	unsigned long readPC();
 	void incPC();
 	void update();
-	void setPC(unsigned long pc);
+	void setPC(uint32_t pc);
 };
 
 class Instruction {

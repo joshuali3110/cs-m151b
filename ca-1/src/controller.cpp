@@ -13,6 +13,7 @@ void Controller::execute(
     bool& aluSrc, 
     bool& jump, 
     bool& branch,
+    bool& offset,
     uint8_t& funct7, 
     uint8_t& funct3,
     uint8_t& opcode) {
@@ -32,6 +33,7 @@ void Controller::execute(
     aluSrc = false;
     jump = false;
     branch = false;
+    offset = false;
     
     // Decode instruction based on opcode
     switch (opcode) {
@@ -54,6 +56,7 @@ void Controller::execute(
             memRead = true;
             MemToReg = true;
             aluSrc = true;
+            offset = true; // Load instructions need address calculation
             // Set fullWord based on funct3
             if (funct3 == 0x2) { // lw
                 fullWord = true;
@@ -65,6 +68,7 @@ void Controller::execute(
         case 0x23: // Store instructions (0100011)
             memWrite = true;
             aluSrc = true;
+            offset = true; // Store instructions need address calculation
             // Set fullWord based on funct3
             if (funct3 == 0x2) { // sw
                 fullWord = true;

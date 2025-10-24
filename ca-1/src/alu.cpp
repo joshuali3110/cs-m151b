@@ -35,7 +35,7 @@ void ALU::execute(uint32_t op1, uint32_t op2, uint8_t opcode, uint32_t& result, 
 
 ALUControl::ALUControl() {}
 
-uint8_t ALUControl::getALUControl(uint8_t funct7, uint8_t funct3, bool offset, bool bne, bool lui) {
+uint8_t ALUControl::execute(uint8_t funct7, uint8_t funct3, bool offset, bool bne, bool lui) {
     if(offset) {
         return 0b111;
     }

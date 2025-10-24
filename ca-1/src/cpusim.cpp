@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
 		instMem.push_back((uint8_t)stoi(line, nullptr, 16));
 	}
 
-	unsigned long maxPC= instMem.size();
+	uint32_t maxPC= instMem.size();
 
 	/* Instantiate your CPU object here.  CPU class is the main class in this project that defines different components of the processor.
 	CPU class also has different functions for each stage (e.g., fetching an instruction, decoding, etc.).
@@ -60,7 +60,51 @@ int main(int argc, char* argv[])
 	/* OPTIONAL: Instantiate your Instruction object here. */
 	//Instruction myInst; 
 	
-	bool done = true;
+	while(true) {
+		uint32_t dontCare = 0;
+		bool dontCareBool = false;
+		
+		// fetch + decode part 1
+		Instruction currentInstruction = Instruction(cpu.instructionMemory.fetchInstruction(cpu.readPC()));
+		cpu.controller.execute(currentInstruction.instruction, cpu.regWrite, cpu.memWrite, cpu.memRead, cpu.fullWord, cpu.MemToReg, cpu.loadImm, cpu.aluSrc, cpu.jump, cpu.branch, cpu.offset, cpu.funct7, cpu.funct3, cpu.opcode);
+		
+		// Check for termination condition (zero opcode)
+		if (cpu.opcode == 0) {
+			break;
+		}
+		
+		// decode part 2
+		uint32_t rs1Data = 0;
+		uint32_t rs2Data = 0;
+		cpu.registerFile.execute(currentInstruction.rs1, currentInstruction.rs2, rs1Data, rs2Data, 0, 0, false);
+		
+		// execute
+		uint32_t alu_result = 0;
+		bool zero = false;
+		cpu.alu.execute(rs1Data, cpu.mux.execute(currentInstruction.immediate, rs2Data, cpu.aluSrc), cpu.aluControl.execute(cpu.funct7, cpu.funct3, cpu.offset, cpu.branch, cpu.loadImm), alu_result, zero);
+
+		// memory
+		uint32_t memReadData = 0;
+		cpu.dataMemory.execute(alu_result, rs2Data, cpu.memWrite, cpu.memRead, memReadData, cpu.fullWord);
+		
+		// write back
+		uint32_t pcPlus4 = cpu.readPC() + 4;
+
+		uint32_t bne_target = cpu.readPC() + (currentInstruction.immediate << 1);
+		uint32_t jal_target = alu_result & ~1;
+
+		uint32_t memToRegData = cpu.mux.execute(memReadData, alu_result, cpu.MemToReg);
+
+		uint32_t rfWriteData = cpu.mux.execute(currentInstruction.immediate, cpu.mux.execute(pcPlus4, memToRegData, cpu.jump), cpu.loadImm);
+		cpu.registerFile.execute(0, 0, 0, 0, currentInstruction.rd, rfWriteData, cpu.regWrite);
+
+		bool branchAndZero = cpu.branch && zero;
+		uint32_t nextPC = cpu.mux.execute(jal_target, cpu.mux.execute(bne_target, pcPlus4, branchAndZero), cpu.jump);
+
+		cpu.setPC(nextPC);
+		cpu.update();
+	}
+		
 	// while (done == true) // processor's main loop. Each iteration is equal to one clock cycle.  
 	// {
 	// 	//fetch
@@ -73,11 +117,9 @@ int main(int argc, char* argv[])
 	// 	if (myCPU.readPC() > maxPC)
 	// 		break;
 	// }
-	int a0 =0;
-	int a1 =0;  
+	int a0 = cpu.registerFile.registers[10];
+	int a1 = cpu.registerFile.registers[11];
 	// print the results (you should replace a0 and a1 with your own variables that point to a0 and a1)
-	  cout << "(" << a0 << "," << a1 << ")" << endl;
-	
+	cout << "(" << a0 << "," << a1 << ")" << endl;
 	return 0;
-
 }
