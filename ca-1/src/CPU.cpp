@@ -6,19 +6,18 @@
 // CPU class implementation
 // ------------------------------------------------------------
 
-CPU::CPU()
+CPU::CPU(unsigned long maxPC, vector<uint8_t>& instMem)
 {
 	PC = 0; //set PC to 0
 	nextPC = 0;
-	for (int i = 0; i < 4096; i++) //copy instrMEM
-	{
-		dmemory[i] = (0);
-	}
-
+	this->maxPC = maxPC;
 	registerFile = RegisterFile();
 	alu = ALU();
 	aluControl = ALUControl();
 	mux = Mux();
+	dataMemory = DataMemory();
+	controller = Controller();
+	instructionMemory = InstructionMemory(instMem);
 }
 
 
@@ -37,4 +36,8 @@ void CPU::update()
 	PC = nextPC;
 	registerFile.update();
 }
+
+void CPU::getPC() { return PC; }
+
+void CPU::setPC(unsigned long pc) { nextPC = pc; }
 

@@ -48,18 +48,13 @@ int main(int argc, char* argv[])
 		instMem.push_back((uint8_t)stoi(line, nullptr, 16));
 	}
 
-	for(int i = 0; i < instMem.size(); i += 4) {
-		instructions.push_back(((uint8_t)instMem[i+3] << 24) | ((uint8_t)instMem[i+2] << 16) | ((uint8_t)instMem[i+1] << 8) | (uint8_t)instMem[i]);
-	}
-
-
-	int maxPC= instMem.size() / 4; 
+	unsigned long maxPC= instMem.size();
 
 	/* Instantiate your CPU object here.  CPU class is the main class in this project that defines different components of the processor.
 	CPU class also has different functions for each stage (e.g., fetching an instruction, decoding, etc.).
 	*/
 
-	CPU myCPU;  // call the approriate constructor here to initialize the processor...  
+	CPU cpu = CPU(maxPC, instMem);  // call the approriate constructor here to initialize the processor...  
 	// make sure to create a variable for PC and resets it to zero (e.g., unsigned int PC = 0); 
 
 	/* OPTIONAL: Instantiate your Instruction object here. */

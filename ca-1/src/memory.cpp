@@ -1,4 +1,4 @@
-#include "data_memory.h"
+#include "memory.h"
 
 DataMemory::DataMemory() {
     for (int i = 0; i < 16384; i++) {
@@ -26,4 +26,15 @@ void DataMemory::execute(uint32_t address, uint32_t writeData, bool memWrite, bo
             readData = memory[address] & 0xFF;
         }
     }
+}
+
+InstructionMemory::InstructionMemory(vector<uint8_t>& instMem) {
+    this->memory = instMem;
+    for(int i = 0; i < instMem.size(); i += 4) {
+		instructions.push_back(((uint8_t)instMem[i+3] << 24) | ((uint8_t)instMem[i+2] << 16) | ((uint8_t)instMem[i+1] << 8) | (uint8_t)instMem[i]);
+	}
+}
+
+uint32_t InstructionMemory::fetchInstruction(unsigned long address) {
+    return instructions[address / 4];
 }

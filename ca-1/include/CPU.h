@@ -14,16 +14,22 @@ using namespace std;
 
 class CPU {
 private:
-	int dmemory[4096]; //data memory byte addressable in little endian fashion;
-	unsigned long PC; //pc
+	unsigned long PC; 
 	unsigned long nextPC;
+	unsigned long maxPC;
 	RegisterFile registerFile;
 	ALU alu;
 	ALUControl aluControl;
+	Mux mux;
+	DataMemory dataMemory;
+	Controller controller;
+	InstructionMemory instructionMemory;
 public:
 	CPU();
-	unsigned long readPC();
+	unsigned long readPC(maxPC);
 	void incPC();
 	void update();
+	void getPC();
+	void setPC(unsigned long pc);
 };
 
