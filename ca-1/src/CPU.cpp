@@ -1,6 +1,4 @@
 #include "CPU.h"
-#include "register_file.h"
-#include "alu.h"
 
 // ------------------------------------------------------------
 // CPU class implementation
@@ -36,8 +34,6 @@ void CPU::update()
 	PC = nextPC;
 	registerFile.update();
 }
-
-void CPU::getPC() { return PC; }
 
 void CPU::setPC(unsigned long pc) { nextPC = pc; }
 
