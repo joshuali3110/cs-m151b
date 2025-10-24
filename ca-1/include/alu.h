@@ -14,5 +14,5 @@ public:
 class ALUControl {
 public:
     ALUControl();
-    uint8_t getALUControl(uint8_t funct7, uint8_t funct3, bool load, bool bne);
+    uint8_t getALUControl(uint8_t funct7, uint8_t funct3, bool load, bool bne, bool lui);
 };

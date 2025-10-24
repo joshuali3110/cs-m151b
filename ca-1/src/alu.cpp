@@ -4,25 +4,25 @@ ALU::ALU() {}
 
 void ALU::execute(uint32_t op1, uint32_t op2, uint8_t opcode, uint32_t& result) {
     switch (opcode) {
-        case 0b111: // ADD: addi, lui, lbu, lw, sh, sw, jalr
+        case 0b111: // ADD: addi, lbu, lw, sh, sw, jalr
             result = op1 + op2;
             break;
-        case 0b110: // SUB
+        case 0b110: // SUB: sub, bne
             result = op1 - op2;
             break;
-        case 0b101: // AND
+        case 0b101: // AND: and
             result = op1 & op2;
             break;
-        case 0b100: // OR
+        case 0b100: // OR: ori
             result = op1 | op2;
             break;
-        case 0b011: // SLTU
+        case 0b011: // SLTU: sltiu
             result = (uint32_t)op1 < (uint32_t)op2;
             break;
-        case 0b010: // SRA
+        case 0b010: // SRA: sra
             result = (int32_t)op1 >> op2;
             break;
-        case 0b000:
+        case 0b000: // No-Op: lui
             cerr << "No-op" << endl;
             break;
         default:
@@ -33,14 +33,18 @@ void ALU::execute(uint32_t op1, uint32_t op2, uint8_t opcode, uint32_t& result) 
 
 ALUControl::ALUControl() {}
 
-uint8_t ALUControl::getALUControl(uint8_t funct7, uint8_t funct3, bool offset, bool bne) {
+uint8_t ALUControl::getALUControl(uint8_t funct7, uint8_t funct3, bool offset, bool bne, bool lui) {
     if(offset) {
         return 0b111;
     }
     if(bne) {
         return 0b110;
     }
-    
+
+    if(lui) {
+        return 0b000;
+    }
+
     switch (funct3) {
         case 0b000: // addi
             return 0b111;
