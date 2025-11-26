@@ -30,7 +30,12 @@ typedef struct _proc_inst_t
     bool ready_to_fire;              // Boolean indicating if dependencies are resolved
     bool fired;                       // Boolean indicating if instruction has been fired
     bool completed;                   // Boolean indicating if instruction has completed execution
+    bool result_broadcast;            // Boolean indicating if result has been broadcast via result bus
     bool retired;                     // Boolean indicating if instruction has been retired
+    
+    // Source dependency tracking - tag of instruction that will produce each source value
+    // 0 means the value is already available (no pending producer)
+    uint64_t src_producer[2];
     
 } proc_inst_t;
 
