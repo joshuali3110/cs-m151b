@@ -7,6 +7,7 @@
 #include <string>
 #include<fstream>
 #include <sstream>
+#include <cstdint>
 using namespace std;
 
 /*
@@ -90,23 +91,27 @@ int main(int argc, char* argv[])
 		// write back
 		uint32_t pcPlus4 = cpu.readPC() + 4;
 
-		uint32_t bne_target = cpu.readPC() + (currentInstruction.immediate << 1);
+		// Branch target: B-type immediate is already shifted by 1 in decode
+		uint32_t branch_target = cpu.readPC() + currentInstruction.immediate;
 		uint32_t jal_target = alu_result & ~1;
 
 		uint32_t memToRegData = cpu.mux.execute(memReadData, alu_result, cpu.MemToReg);
 
 		uint32_t rfWriteData = cpu.mux.execute(currentInstruction.immediate, cpu.mux.execute(pcPlus4, memToRegData, cpu.jump), cpu.loadImm);
-		cpu.registerFile.execute(0, 0, 0, 0, currentInstruction.rd, rfWriteData, cpu.regWrite);
+		uint32_t dummy1, dummy2;
+		cpu.registerFile.execute(0, 0, dummy1, dummy2, currentInstruction.rd, rfWriteData, cpu.regWrite);
 
-		bool branchAndZero = cpu.branch && zero;
-		uint32_t nextPC = cpu.mux.execute(jal_target, cpu.mux.execute(bne_target, pcPlus4, branchAndZero), cpu.jump);
+		// Branch condition: support beq (funct3==0b000) and bne (funct3==0b001)
+		bool isBne = (cpu.funct3 == 0x1);
+		bool branchTaken = cpu.branch && (isBne ? !zero : zero);
+		uint32_t nextPC = cpu.mux.execute(jal_target, cpu.mux.execute(branch_target, pcPlus4, branchTaken), cpu.jump);
 
 		cpu.setPC(nextPC);
 		cpu.update();
 	}
 		
-	int a0 = cpu.registerFile.registers[10];
-	int a1 = cpu.registerFile.registers[11];
+	int a0 = cpu.registerFile.getRegister(10);
+	int a1 = cpu.registerFile.getRegister(11);
 	// print the results (you should replace a0 and a1 with your own variables that point to a0 and a1)
 	cout << "(" << a0 << "," << a1 << ")" << endl;
 	return 0;

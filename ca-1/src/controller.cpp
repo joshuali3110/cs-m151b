@@ -1,4 +1,5 @@
 #include "controller.h"
+#include <cstdint>
 
 Controller::Controller() {}
 

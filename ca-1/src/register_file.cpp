@@ -1,4 +1,5 @@
 #include "register_file.h"
+#include <cstdint>
 
 // ------------------------------------------------------------
 // RegisterFile class implementation
@@ -25,4 +26,8 @@ void RegisterFile::update() {
 	for (int i = 0; i < 32; i++) {
 		registers[i] = nextRegisters[i];
 	}
+}
+
+uint32_t RegisterFile::getRegister(int index) const {
+	return registers[index];
 }

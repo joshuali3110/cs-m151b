@@ -1,4 +1,5 @@
 #include "mux.h"
+#include <cstdint>
 
 Mux::Mux() {}
 

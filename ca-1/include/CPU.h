@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string>
 #include <vector>
+#include <cstdint>
 
 #include "register_file.h"
 #include "alu.h"
@@ -41,7 +42,7 @@ public:
 	InstructionMemory instructionMemory;
 
 	CPU(uint32_t maxPC, vector<uint8_t>& instMem);
-	unsigned long readPC();
+	uint32_t readPC();
 	void incPC();
 	void update();
 	void setPC(uint32_t pc);

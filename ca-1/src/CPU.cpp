@@ -1,31 +1,16 @@
 #include "CPU.h"
+#include <cstdint>
 
 // ------------------------------------------------------------
 // CPU class implementation
 // ------------------------------------------------------------
 
-CPU::CPU(uint32_t maxPC, vector<uint8_t>& instMem)
+CPU::CPU(uint32_t maxPC, vector<uint8_t>& instMem) 
+	: PC(0), nextPC(0), maxPC(maxPC), regWrite(false), memWrite(false), memRead(false), 
+	  fullWord(false), MemToReg(false), loadImm(false), aluSrc(false), jump(false), 
+	  branch(false), offset(false), registerFile(), alu(), aluControl(), mux(), 
+	  dataMemory(), controller(), instructionMemory(instMem)
 {
-	PC = 0; //set PC to 0
-	nextPC = 0;
-	this->maxPC = maxPC;
-	regWrite = false;
-	memWrite = false;
-	memRead = false;
-	fullWord = false;
-	MemToReg = false;
-	loadImm = false;
-	aluSrc = false;
-	jump = false;
-	branch = false;
-	offset = false;
-	registerFile = RegisterFile();
-	alu = ALU();
-	aluControl = ALUControl();
-	mux = Mux();
-	dataMemory = DataMemory();
-	controller = Controller();
-	instructionMemory = InstructionMemory(instMem);
 }
 
 
@@ -91,6 +76,7 @@ void Instruction::generateImmediate() {
 			break;
 			
 		case 0x23: // S-type (sw, sh)
+		{
 			// S-type: immediate is split across bits [31:25] and [11:7]
 			// imm[11:5] in bits [31:25], imm[4:0] in bits [11:7]
 			uint32_t imm_high = (instruction >> 25) & 0x7F;  // bits [31:25]
@@ -101,8 +87,10 @@ void Instruction::generateImmediate() {
 				immediate |= 0xFFFFF000; // Sign extend with 1s
 			}
 			break;
+		}
 			
 		case 0x63: // B-type (bne)
+		{
 			// B-type: immediate is split across bits [31], [30:25], [11:8], [7]
 			// imm[12] in bit [31], imm[10:5] in bits [30:25], imm[4:1] in bits [11:8], imm[11] in bit [7]
 			uint32_t imm_12 = (instruction >> 31) & 0x1;     // bit [31]
@@ -117,6 +105,7 @@ void Instruction::generateImmediate() {
 				immediate |= 0xFFFFE000; // Sign extend with 1s
 			}
 			break;
+		}
 			
 			
 		default:

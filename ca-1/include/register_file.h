@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include<stdlib.h>
 #include <string>
+#include <cstdint>
 using namespace std;
 
 class RegisterFile {
@@ -13,4 +14,5 @@ public:
 	RegisterFile();
 	void execute(uint8_t rs1, uint8_t rs2, uint32_t& rs1Data, uint32_t& rs2Data, uint8_t rd, uint32_t writeData, bool regWrite);
 	void update();
+	uint32_t getRegister(int index) const;
 };
